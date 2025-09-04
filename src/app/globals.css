@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Brand — sunny + playful */
+  --primary: 43 95% 50%;    /* Sun Yellow (#F7B500-ish) — main brand/action */
+  --accent:  174 72% 36%;   /* Teal 500 (#0EA5A6) — contrast accent */
+  --accent-2: 8 88% 62%;    /* Coral 500 (#F97360) — sparing highlights */
+
+  /* Functional */
+  --success: 160 84% 39%;   /* #10B981 */
+  --warning: 28 92% 55%;    /* deeper orange for warnings */
+  --danger:   0 84% 60%;    /* #EF4444 */
+  --info:    203 89% 53%;   /* sky 500 */
+
+  /* Neutrals (warm & light) */
+  --bg:       48 100% 98%;  /* Warm off-white (#FFFDF3) */
+  --surface:   0   0% 100%; /* Pure white */
+  --surface-2: 48 60% 97%;  /* Very light warm panel */
+  --border:   48 29% 90%;   /* Soft warm border */
+  --text:    222 47% 11%;   /* Slate-900 for strong contrast on yellow/white */
+  --text-2:  217 19% 35%;   /* Slate-600 for body/secondary */
+  --muted:   217 19% 55%;   /* Slate-500/400 range */
+
+  /* Elevation & radii */
+  --radius: 16px;
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-md: 0 10px 24px rgba(16, 24, 40, 0.08);
+
+    --chip-bg: hsl(var(--primary) / .10);
+  --chip-ring: hsl(var(--primary) / .35);
+
+  /* Focus (teal ring works on yellow) */
+  --focus-ring: 174 72% 36%; /* hsl(var(--accent)) */
+
+  /* Gradients */
+  --hero-grad: linear-gradient(135deg,
+    hsl(var(--primary) / 0.22) 0%,
+    hsl(var(--accent) / 0.18) 52%,
+    hsl(var(--accent-2) / 0.18) 100%
+  );
+}
+
+/* No dark theme — we stay bright & colorful */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { max-width: 100vw; overflow-x: hidden; }
+
+body {
+  color: hsl(var(--text));
+  background: hsl(var(--bg));
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: inherit; text-decoration: none; }
+
+:where(button, [role="button"], a) { outline: none; }
+:where(button:focus-visible, [role="button"]:focus-visible, a:focus-visible) {
+  box-shadow: 0 0 0 4px hsl(var(--focus-ring) / 0.35);
+  border-radius: 12px;
+}
+
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+.text-center { text-align: center; }
+
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+
+.grid { display: grid; }
+.gap-4 { gap: 1rem; }
+.gap-8 { gap: 2rem; }
+
+/* Responsive grid */
+.grid-responsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* Sunny hero band */
+.hero-sunny {
+  background: var(--hero-grad);
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+/* Brand chips/badges (text uses solid hue for contrast) */
+.badge-primary {
+  background: hsl(var(--primary) / 0.18);
+  color: hsl(var(--text));
+  border: 1px solid hsl(var(--primary) / 0.35);
+  border-radius: 999px; padding: 0.25rem 0.6rem; font-weight: 600;
+}
+.badge-accent {
+  background: hsl(var(--accent) / 0.14);
+  color: hsl(var(--accent));
+  border: 1px solid hsl(var(--accent) / 0.35);
+  border-radius: 999px; padding: 0.25rem 0.6rem; font-weight: 600;
+}
+
+/* Buttons (if you need generic classes beyond your Button.tsx) */
+.btn-primary {
+  background: hsl(var(--primary)); color: #1f2937; /* dark slate for contrast on yellow */
+  border: 1px solid hsl(var(--primary) / 0.5);
+  border-radius: var(--radius); padding: 0.75rem 1rem; font-weight: 700;
+  box-shadow: var(--shadow-sm); transition: transform .04s ease, filter .15s ease, box-shadow .15s ease; 
+}
+.btn-primary:hover { filter: brightness(1.03); }
+.btn-primary:active { transform: translateY(1px); }
+.btn-primary:focus-visible { box-shadow: 0 0 0 4px hsl(var(--accent) / .35); }
+
+.btn-secondary {
+  background: hsl(var(--surface)); color: hsl(var(--text));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius); padding: 0.75rem 1rem; font-weight: 700;
+  box-shadow: var(--shadow-sm);
+}
+.btn-secondary:hover { border-color: hsl(var(--accent) / 0.4); }
+
+/* Cards */
+.card {
+  background: hsl(var(--surface));
+  color: hsl(var(--text));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Section headers */
+.section-title {
+  color: hsl(var(--text));
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* Dividers with warm tone */
+.hr {
+  height: 1px; border: 0; background: hsl(var(--border));
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 0.5rem; }
+  .md\:flex { flex-direction: column; }
+}

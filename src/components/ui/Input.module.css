@@ -1,0 +1,51 @@
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.inputLabel {
+  font-weight: 500;
+  color: hsl(var(--text));
+  font-size: 0.875rem;
+}
+
+.required {
+  color: hsl(var(--danger));
+  margin-left: 0.25rem;
+}
+
+.inputField {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--surface));
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.inputField:focus {
+  outline: none;
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.1);
+}
+
+.inputField::placeholder {
+  color: hsl(var(--text-2));
+}
+
+.inputField.error {
+  border-color: hsl(var(--danger));
+}
+
+.inputField.error:focus {
+  box-shadow: 0 0 0 3px hsl(var(--danger) / 0.1);
+}
+
+.errorMessage {
+  color: hsl(var(--danger));
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
