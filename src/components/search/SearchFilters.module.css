@@ -1,0 +1,36 @@
+.filters {
+  background: hsl(var(--surface));
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  margin-top: 2rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  align-items: end;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.actions {
+  display: flex;
+  align-items: end;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .filters {
+    padding: 1rem;
+  }
+  
+  .row {
+    grid-template-columns: 1fr;
+  }
+}

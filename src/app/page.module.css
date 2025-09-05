@@ -2,47 +2,56 @@
   min-height: 100vh;
 }
 
-.section { padding: clamp(40px, 7vw, 80px) 0; }
-.stack-16 > * + * { margin-top: 16px; }
-
 /* Hero Section */
 .hero {
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
+  grid-template-columns: 1fr 1fr;
   gap: 4rem;
   align-items: center;
-  padding: clamp(3rem, 5vw, 5rem) 0;
+  padding: clamp(3rem, 5vw, 6rem) 0;
+  position: relative;
+  overflow: hidden;
 }
 
 .heroContent {
   padding: 0 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.heroText {
+  max-width: 600px;
 }
 
 .heroTitle {
-  font-size: clamp(32px, 5vw, 60px);
+  font-size: clamp(2.5rem, 5vw, 3.75rem);
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -0.02em;
-  margin: 0 0 1rem 0;
-  color: hsl(var(--text));
+  margin: 0 0 1.5rem 0;
 }
 
-.highlight {
-  color: hsl(var(--primary));
-  display: inline;
+.gradientText {
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
 }
 
 .heroDescription {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   color: hsl(var(--text-2));
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   max-width: 52ch;
+  line-height: 1.6;
 }
 
 .heroActions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 1rem;
+  align-items: center;
 }
 
 .actionLink,
@@ -54,16 +63,28 @@
   margin-left: 0.5rem;
 }
 
-/* Visual: soft blob using brand colors at low alpha */
-.heroImage {
+.actionLinkSecondary .btnText {
+  margin-right: 0.5rem;
+}
+
+/* Hero Visual */
+.heroVisual {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
+}
+
+.heroImage {
+  position: relative;
+  width: clamp(280px, 38vw, 420px);
+  height: clamp(280px, 38vw, 420px);
 }
 
 .imageBlob {
-  width: clamp(260px, 38vw, 420px);
-  height: clamp(260px, 38vw, 420px);
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   background:
     radial-gradient(60% 60% at 30% 30%, hsl(var(--primary) / 0.12), transparent 60%),
@@ -73,6 +94,8 @@
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow-md);
+  position: relative;
+  z-index: 1;
 }
 
 .placeholderIcon {
@@ -81,18 +104,109 @@
   opacity: 1;
 }
 
+.floatingElement {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: hsl(var(--surface));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(var(--primary));
+  font-size: 1.5rem;
+  box-shadow: var(--shadow-md);
+  animation: float 6s ease-in-out infinite;
+  animation-delay: var(--delay);
+  z-index: 2;
+}
+
+.floatingElement:nth-child(2) {
+  top: 10%;
+  right: 15%;
+}
+
+.floatingElement:nth-child(3) {
+  bottom: 20%;
+  left: 10%;
+}
+
+.floatingElement:nth-child(4) {
+  bottom: 10%;
+  right: 20%;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+/* Parallax effect for desktop */
+@media (min-width: 1024px) {
+  .heroVisual {
+    perspective: 1000px;
+  }
+  
+  .heroImage {
+    transform-style: preserve-3d;
+  }
+  
+  .floatingElement {
+    transition: transform 0.3s ease-out;
+  }
+  
+  .heroVisual:hover .floatingElement:nth-child(2) {
+    transform: translate3d(5px, -10px, 20px);
+  }
+  
+  .heroVisual:hover .floatingElement:nth-child(3) {
+    transform: translate3d(-5px, 10px, 20px);
+  }
+  
+  .heroVisual:hover .floatingElement:nth-child(4) {
+    transform: translate3d(5px, 5px, 20px);
+  }
+}
+
 /* Features Section */
 .features {
   padding: 6rem 0;
   background-color: hsl(var(--surface));
+  position: relative;
+}
+
+.features::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, hsl(var(--border)), transparent);
+}
+
+.featuresHeader {
+  text-align: center;
+  margin-bottom: 4rem;
 }
 
 .sectionTitle {
-  text-align: center;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 800;
   letter-spacing: -0.01em;
-  font-size: clamp(24px, 3.2vw, 40px);
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
   color: hsl(var(--text));
+}
+
+.sectionSubtitle {
+  font-size: 1.25rem;
+  color: hsl(var(--text-2));
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .featuresGrid {
@@ -104,129 +218,258 @@
 }
 
 .featureCard {
-  text-align: center;
-  padding: 2rem;
+  padding: 2.5rem 2rem;
   background: hsl(var(--bg));
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
   transition: all 0.3s ease;
-  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  border: 1px solid hsl(var(--border));
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.featureCard:hover,
-.featureCard:focus-within {
-  transform: translateY(-4px);
+.featureCard:hover {
+  transform: translateY(-8px);
   box-shadow: var(--shadow-md);
-  border-color: hsl(var(--primary) / .28);
+  border-color: hsl(var(--primary) / 0.3);
 }
 
 .featureIcon {
   width: 80px;
   height: 80px;
   margin: 0 auto 1.5rem;
-  background: linear-gradient(135deg, hsl(var(--primary) / 0.18) 0%, hsl(var(--accent-2) / 0.18) 100%);
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.12) 0%, hsl(var(--accent) / 0.12) 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  color: hsl(var(--accent));
+  color: hsl(var(--primary));
+  border: 1px solid hsl(var(--primary) / 0.2);
 }
 
-.featureCard h3 {
+.featureTitle {
   font-size: 1.5rem;
   margin-bottom: 1rem;
   color: hsl(var(--text));
+  text-align: center;
 }
 
-.featureCard p {
+.featureText {
   color: hsl(var(--text-2));
+  margin-bottom: 2rem;
+  flex-grow: 1;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.featureLink {
+  text-align: center;
+  margin-top: auto;
+}
+
+.featureLink a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: hsl(var(--primary));
+  font-weight: 600;
+  transition: gap 0.2s ease;
+}
+
+.featureLink a:hover {
+  gap: 0.75rem;
 }
 
 /* CTA Section */
 .cta {
   padding: 6rem 0;
   text-align: center;
-  background: linear-gradient(135deg, hsl(var(--primary) / 0.18) 0%, hsl(var(--accent-2) / 0.18) 100%);
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--accent) / 0.08) 100%);
+  position: relative;
 }
 
-.cta h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+.cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, hsl(var(--border)), transparent);
+}
+
+.ctaContent {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.ctaTitle {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.5rem;
   color: hsl(var(--text));
 }
 
-.cta p {
+.ctaText {
   font-size: 1.25rem;
   color: hsl(var(--text-2));
   margin-bottom: 2.5rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  line-height: 1.6;
 }
 
 .ctaActions {
   display: flex;
   gap: 1rem;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 /* Responsive Design */
-
-@media (min-width: 1024px) {
-  .imageBlob { outline: 2px solid hsl(var(--primary) / .25); outline-offset: -6px; }
-}
-
 @media (max-width: 968px) {
   .hero {
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 2rem;
+    gap: 3rem;
   }
   
-  .heroTitle {
-    font-size: 2.5rem;
+  .heroText {
+    margin: 0 auto;
   }
   
   .heroActions {
     justify-content: center;
   }
   
-  .imagePlaceholder {
-    width: 300px;
-    height: 300px;
-  }
-  
-  .placeholderIcon {
-    font-size: 5rem;
+  .floatingElement {
+    width: 50px;
+    height: 50px;
+    font-size: 1.25rem;
   }
 }
 
 @media (max-width: 640px) {
   .heroTitle {
-    font-size: 2rem;
+    font-size: 2.25rem;
   }
   
   .heroActions {
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
   }
   
   .ctaActions {
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
   }
   
   .featuresGrid {
     grid-template-columns: 1fr;
   }
   
-  .imagePlaceholder {
-    width: 250px;
-    height: 250px;
+  .featureCard {
+    padding: 2rem 1.5rem;
   }
   
-  .placeholderIcon {
-    font-size: 4rem;
+  /* Keep floating elements on mobile but adjust position */
+  .floatingElement {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .floatingElement:nth-child(2) {
+    top: 5%;
+    right: 10%;
+  }
+  
+  .floatingElement:nth-child(3) {
+    bottom: 15%;
+    left: 5%;
+  }
+  
+  .floatingElement:nth-child(4) {
+    bottom: 5%;
+    right: 15%;
+  }
+}
+
+/* Animation for elements */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.heroContent,
+.featuresHeader,
+.ctaContent {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.featureCard {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.featureCard:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.featureCard:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.featureCard:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+/* Mobile-specific floating animation */
+@media (max-width: 768px) {
+  @keyframes mobileFloat {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    33% {
+      transform: translateY(-15px) rotate(3deg);
+    }
+    66% {
+      transform: translateY(10px) rotate(-3deg);
+    }
+  }
+  
+  .floatingElement {
+    animation: mobileFloat 8s ease-in-out infinite;
+  }
+}
+
+/* Add subtle movement on device orientation change for mobile */
+@media (max-width: 768px) and (orientation: portrait) {
+  .floatingElement {
+    transition: transform 0.5s ease-out;
+  }
+  
+  /* This would need JavaScript to work fully, but we can add a subtle animation */
+  @keyframes tilt {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(1deg);
+    }
+    75% {
+      transform: rotate(-1deg);
+    }
+  }
+  
+  .heroImage {
+    animation: tilt 20s ease-in-out infinite;
   }
 }

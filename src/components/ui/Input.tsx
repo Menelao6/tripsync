@@ -1,32 +1,33 @@
-import React from 'react';
+'use client';
+
+import React, { useId, forwardRef } from 'react';
 import styles from './Input.module.css';
 
-interface InputProps {
+interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'className'> {
   label?: string;
-  type?: 'text' | 'email' | 'password' | 'search' | 'number';
-  placeholder?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  name?: string;
-  id?: string;
-  required?: boolean;
   error?: string;
   className?: string;
 }
 
-const Input: React.FC<InputProps> = ({
-  label,
-  type = 'text',
-  placeholder,
-  value,
-  onChange,
-  name,
-  id,
-  required = false,
-  error,
-  className = ''
-}) => {
-  const inputId = id || name || `input-${Math.random().toString(36).substr(2, 9)}`;
+const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  {
+    label,
+    type = 'text',
+    placeholder,
+    value,
+    onChange,
+    name,
+    id,
+    required = false,
+    error,
+    className = '',
+    ...rest
+  },
+  ref
+) {
+  const uid = useId(); // ✅ hydration-safe
+  const inputId = id ?? name ?? uid;
+  const errorId = error ? `${inputId}-error` : undefined;
 
   return (
     <div className={`${styles.inputGroup} ${className}`}>
@@ -36,19 +37,29 @@ const Input: React.FC<InputProps> = ({
           {required && <span className={styles.required}>*</span>}
         </label>
       )}
+
       <input
-        type={type}
+        ref={ref}
         id={inputId}
+        name={name}
+        type={type}
         className={`${styles.inputField} ${error ? styles.error : ''}`}
         placeholder={placeholder}
-        value={value}
+        value={value ?? ''}                 // keep controlled, avoid warnings
         onChange={onChange}
-        name={name}
         required={required}
+        aria-invalid={!!error}
+        aria-describedby={errorId}
+        {...rest}                          // supports min, max, autoComplete, etc.
       />
-      {error && <span className={styles.errorMessage}>{error}</span>}
+
+      {error && (
+        <span id={errorId} className={styles.errorMessage}>
+          {error}
+        </span>
+      )}
     </div>
   );
-};
+});
 
 export default Input;

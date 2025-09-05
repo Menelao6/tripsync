@@ -20,12 +20,13 @@ interface CardImageProps {
   src: string;
   alt: string;
   height?: number;
+  width?: number;
 }
 
 export const CardImage: React.FC<CardImageProps> = ({ src, alt, height = 200 }) => {
   return (
     <div className={styles.cardImage} style={{ height: `${height}px` }}>
-      <Image src={src} alt={alt} />
+      <Image src={src} alt={alt} width={250} height={200} />
     </div>
   );
 };
