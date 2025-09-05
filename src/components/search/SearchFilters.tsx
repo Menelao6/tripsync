@@ -4,7 +4,7 @@ import { useState } from 'react';
 import styles from './SearchFilters.module.css';
 import Input from '../ui/Input';
 import Button from '../ui/Button';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaPlus, FaMinus } from 'react-icons/fa';
 
 type SearchFormData = { 
   query: string; 
@@ -26,8 +26,18 @@ export default function SearchFilters({ defaultValues, onSubmit }: Props) {
   const [end, setEnd] = useState(defaultValues?.end ?? '');
   const [people, setPeople] = useState(defaultValues?.people ?? 2);
 
+  const handlePeopleChange = (value: number) => {
+    if (value < 1) return;
+    setPeople(value);
+  };
+
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (people < 1) {
+      alert("Number of people must be at least 1");
+      setPeople(1);
+      return;
+    }
     onSubmit({ query, city, start, end, people });
   };
 
@@ -36,33 +46,69 @@ export default function SearchFilters({ defaultValues, onSubmit }: Props) {
       <div className={styles.row}>
         <div className={styles.field}>
           <Input 
-            placeholder="Search attractions or cities..." 
+            placeholder="Eiffel Tower, beaches, museums..." 
             value={query} 
             onChange={e => setQuery(e.target.value)}
+            label="What to explore"
           />
-        </div>
-        <div className={styles.field}>
-          <Input placeholder="City" value={city} onChange={e => setCity(e.target.value)} />
-        </div>
-        <div className={styles.field}>
-          <Input type="date" value={start} onChange={e => setStart(e.target.value)} />
-        </div>
-        <div className={styles.field}>
-          <Input type="date" value={end} onChange={e => setEnd(e.target.value)} />
         </div>
         <div className={styles.field}>
           <Input 
-            type="number" 
-            min={1} 
-            value={people} 
-            onChange={e => setPeople(parseInt(e.target.value || '1', 10))}
-            label="People"
+            placeholder="Paris, Barcelona, Tokyo..." 
+            value={city} 
+            onChange={e => setCity(e.target.value)}
+            label="Destination city"
           />
         </div>
+        <div className={styles.field}>
+          <Input 
+            type="date" 
+            value={start} 
+            onChange={e => setStart(e.target.value)}
+            label="Start date"
+          />
+        </div>
+        <div className={styles.field}>
+          <Input 
+            type="date" 
+            value={end} 
+            onChange={e => setEnd(e.target.value)}
+            label="End date"
+          />
+        </div>
+        <div className={styles.peopleField}>
+          <label className={styles.label}>Travelers</label>
+          <div className={styles.peopleInput}>
+            <button 
+              type="button" 
+              className={styles.peopleButton}
+              onClick={() => handlePeopleChange(people - 1)}
+              aria-label="Decrease number of people"
+            >
+              <FaMinus />
+            </button>
+            <input
+              type="number"
+              min="1"
+              value={people}
+              onChange={e => handlePeopleChange(parseInt(e.target.value) || 1)}
+              className={styles.peopleCount}
+              aria-label="Number of people"
+            />
+            <button 
+              type="button" 
+              className={styles.peopleButton}
+              onClick={() => handlePeopleChange(people + 1)}
+              aria-label="Increase number of people"
+            >
+              <FaPlus />
+            </button>
+          </div>
+        </div>
         <div className={styles.actions}>
-          <Button variant="primary" size="large" type="submit">
+          <Button variant="primary" size="large" type="submit" className={styles.searchButton}>
             <FaSearch />
-            Search
+            Explore Now
           </Button>
         </div>
       </div>

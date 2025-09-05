@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import styles from './page.module.css';
 import SearchFilters from '../../components/search/SearchFilters';
 import SearchResults from '../../components/search/SearchResults';
+import CityStrip from '../../components/search/CityStrip';
 
 type Attraction = {
   id: string;
@@ -86,6 +87,17 @@ export default function SearchPage() {
     people
   };
 
+  const handleCityPick = async (cityName: string) => {
+  await handleSearch({
+    query,
+    city: cityName,
+    start,
+    end,
+    people,
+  });
+};
+
+
   return (
     <main className={styles.page}>
       <section className={styles.hero}>
@@ -103,6 +115,7 @@ export default function SearchPage() {
         </div>
       </section>
 
+      <CityStrip onPick={handleCityPick} />
       <section className={styles.resultsSection}>
         <div className={styles.container}>
           <SearchResults

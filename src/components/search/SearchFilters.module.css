@@ -4,12 +4,13 @@
   padding: 1.5rem;
   box-shadow: var(--shadow-md);
   margin-top: 2rem;
+  border: 2px solid hsl(var(--primary) / 0.1);
 }
 
 .row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  gap: 1.5rem;
   align-items: end;
 }
 
@@ -19,18 +20,129 @@
   gap: 0.5rem;
 }
 
+.peopleField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: hsl(var(--text-2));
+}
+
+.peopleInput {
+  display: flex;
+  align-items: center;
+  background: hsl(var(--bg));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  overflow: hidden;
+  height: 48px;
+}
+
+.peopleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 100%;
+  background: hsl(var(--surface));
+  border: none;
+  color: hsl(var(--text));
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.peopleButton:hover {
+  background: hsl(var(--primary) / 0.1);
+}
+
+.peopleButton:active {
+  background: hsl(var(--primary) / 0.2);
+}
+
+.peopleCount {
+  width: 60px;
+  height: 100%;
+  border: none;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  color: hsl(var(--text));
+  background: transparent;
+  -moz-appearance: textfield;
+}
+
+.peopleCount::-webkit-outer-spin-button,
+.peopleCount::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .actions {
   display: flex;
   align-items: end;
   height: 100%;
 }
 
-@media (max-width: 768px) {
+.searchButton {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Experimental floating label effect */
+.field input:focus + label,
+.field input:not(:placeholder-shown) + label {
+  transform: translateY(-0.5rem) scale(0.85);
+  color: hsl(var(--primary));
+}
+
+/* Responsive design */
+@media (max-width: 968px) {
+  .row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
   .filters {
-    padding: 1rem;
+    padding: 1.25rem;
   }
   
   .row {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
+  
+  .peopleInput {
+    height: 44px;
+  }
+  
+  .peopleButton {
+    width: 44px;
+  }
+}
+
+/* Animation for the search button */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px hsl(var(--primary) / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0);
+  }
+}
+
+.searchButton {
+  animation: pulse 2s infinite;
+}
+
+.searchButton:hover {
+  animation: none;
 }
