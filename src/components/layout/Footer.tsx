@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FaCompass, FaTwitter, FaInstagram, FaGithub } from 'react-icons/fa';
+import { FaCompass, FaWhatsapp, FaInstagram, FaGithub } from 'react-icons/fa';
 import styles from './Footer.module.css';
 
 const Footer = () => {
@@ -20,8 +20,8 @@ const Footer = () => {
             </p>
 
             <div className={styles.socials} role="group" aria-label="Social links">
-              <Link href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-                <FaTwitter aria-hidden="true" />
+              <Link href="https://wa.me/355688435906?text=Hello" target="_blank" rel="noopener noreferrer" aria-label="Whatsapp">
+                <FaWhatsapp aria-hidden="true" />
               </Link>
               <Link href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                 <FaInstagram aria-hidden="true" />

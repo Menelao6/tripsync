@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './AttractionCard.module.css';
 import { Card, CardImage, CardContent, CardTitle } from '../ui/Card';
-import { FaStar, FaPlus, FaMapMarkerAlt, FaChevronDown } from 'react-icons/fa';
+import { FaStar, FaPlus, FaMapMarkerAlt, FaCalendarAlt, FaTimes } from 'react-icons/fa';
 
 type Props = {
   item: {
@@ -25,12 +25,20 @@ const MOCK_DATES = [
   '2025-09-03',
   '2025-09-04',
   '2025-09-05',
+  '2025-09-06',
+  '2025-09-07',
+  '2025-09-08',
+  '2025-09-09',
+  '2025-09-10',
 ];
 
 export default function AttractionCard({ item, onAdd }: Props) {
   const photo = item.photos?.[0] ?? '/images/placeholder-attraction.jpg';
   const [open, setOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [showScrollBottom, setShowScrollBottom] = useState(false);
   const ddRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
 
   // close on outside click/escape
   useEffect(() => {
@@ -49,54 +57,117 @@ export default function AttractionCard({ item, onAdd }: Props) {
     };
   }, []);
 
+  // Check scroll indicators when dropdown opens
+  useEffect(() => {
+    if (!open || !listRef.current) return;
+    
+    const checkScroll = () => {
+      if (!listRef.current) return;
+      const { scrollTop, scrollHeight, clientHeight } = listRef.current;
+      setShowScrollTop(scrollTop > 0);
+      setShowScrollBottom(scrollTop + clientHeight < scrollHeight - 1);
+    };
+
+    // Check initially and on scroll
+    const timer = setTimeout(checkScroll, 50);
+    const listElement = listRef.current;
+    
+    if (listElement) {
+      listElement.addEventListener('scroll', checkScroll);
+    }
+    
+    return () => {
+      clearTimeout(timer);
+      if (listElement) {
+        listElement.removeEventListener('scroll', checkScroll);
+      }
+    };
+  }, [open]);
+
   const handlePick = (date: string) => {
     onAdd?.(item.place_id, date);
     setOpen(false);
   };
 
   return (
-    <Card className={styles.card}  aria-label={`Attraction: ${item.name}`}>
+    <Card className={styles.card} aria-label={`Attraction: ${item.name}`}>
       {/* Media */}
       <div className={styles.media}>
         <CardImage src={photo} alt={item.name} width={250} height={200} />
 
         {/* Add to trip dropdown trigger (top-right) */}
         <div className={`${styles.addWrap} ${open ? styles.open : ''}`} ref={ddRef}>
-  <button
-    className={`${styles.addButton} ${open ? styles.addOpen : ''}`}
-    aria-haspopup="menu"
-    aria-expanded={open}
-    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(v => !v); }}
-    title="Add to trip"
-  >
-    <FaPlus aria-hidden="true" />
-    <FaChevronDown className={styles.chev} aria-hidden="true" />
-  </button>
+          <button
+            className={`${styles.addButton} ${open ? styles.addOpen : ''}`}
+            aria-haspopup="menu"
+            aria-expanded={open}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(v => !v); }}
+            title={open ? "Close" : "Add to trip"}
+          >
+            <div className={styles.buttonContent}>
+              <div className={styles.iconContainer}>
+                {open ? <FaTimes aria-hidden="true" /> : <FaPlus aria-hidden="true" />}
+              </div>
+              {open && <span className={styles.buttonText}>Add to Trip</span>}
+            </div>
+          </button>
 
-  {open && (
-    <div className={styles.dropdown} role="menu" aria-label="Choose a date to add this attraction">
-              <div className={styles.dropdownHeader}>Add to day</div>
-              <ul className={styles.list}>
-                {MOCK_DATES.map((d) => (
-                  <li key={d}>
-                    <button
-                      role="menuitem"
-                      className={styles.listItem}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handlePick(d);
-                      }}
-                    >
-                      {new Date(d).toLocaleDateString(undefined, {
-                        month: 'short',
-                        day: 'numeric',
-                        weekday: 'short',
-                      })}
-                    </button>
-                  </li>
-                ))}
-              </ul>
+          {open && (
+            <div className={styles.dropdown} role="menu" aria-label="Choose a date to add this attraction">
+              <div className={styles.dropdownHeader}>
+                <FaCalendarAlt className={styles.headerIcon} />
+                Choose a day
+              </div>
+              <div className={`${styles.scrollContainer} ${showScrollBottom ? 'showScrollBottom' : ''}`}>
+                {showScrollTop && (
+                  <div className={`${styles.scrollIndicator} ${styles.scrollTop}`}>
+                    ▲
+                  </div>
+                )}
+                <div 
+                  className={styles.listContainer} 
+                  ref={listRef}
+                >
+                  <ul className={styles.list}>
+                    {MOCK_DATES.map((d) => (
+                      <li key={d}>
+                        <button
+                          role="menuitem"
+                          className={styles.listItem}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handlePick(d);
+                          }}
+                        >
+                          <div className={styles.dateInfo}>
+                            <span className={styles.dayWeek}>
+                              {new Date(d).toLocaleDateString(undefined, {
+                                weekday: 'short',
+                              })}
+                            </span>
+                            <span className={styles.monthDay}>
+                              {new Date(d).toLocaleDateString(undefined, {
+                                month: 'short',
+                                day: 'numeric',
+                              })}
+                            </span>
+                          </div>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                {showScrollBottom && (
+                  <div className={`${styles.scrollIndicator} ${styles.scrollBottom}`}>
+                    ▼
+                  </div>
+                )}
+                {/* Mobile scroll hint */}
+                {showScrollBottom && (
+                  <div className={styles.mobileScrollHint} aria-hidden="true"></div>
+                )}
+              </div>
             </div>
           )}
         </div>

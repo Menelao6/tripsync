@@ -1,121 +1,297 @@
 :root {
-  --city-thumb: clamp(56px, 50vw, 80px);
-  --city-gap: 14px;
-  --pill-width: clamp(180px, 34vw, 200px);
-  --pill-pad: 12px;
+  --city-item-width: clamp(140px, 20vw, 190px);
+  --city-item-height: 78px;
+  --city-gap: 12px;
+  --city-padding: 12px;
+  --avatar-size: 60px;
+  --border-radius: 16px;
 }
 
-/* pill container */
-.list{
+/* Main container */
+.wrap {
+  position: relative;
+  width: 100%;
+  background: hsl(var(--surface));
+  box-shadow: var(--shadow);
+  border-bottom: 1px solid hsl(var(--border));
+  border-radius: 999px;
+  overflow: hidden;
+  max-width: 1800px;
+  margin: 0 auto;
+  backdrop-filter: saturate(180%) blur(12px);
+}
+
+/* Scroll hint indicator */
+.scrollHint {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  z-index: 20;
+  pointer-events: none;
+}
+
+.scrollIndicator {
+  background: #FFA500;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
   display: flex;
-  flex-wrap: nowrap;        
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 12px;
+  animation: bounceHint 2s infinite;
+  opacity: 0.8;
+}
+
+@keyframes bounceHint {
+  0%, 20%, 50%, 80%, 100% { transform: translateX(0); }
+  40% { transform: translateX(-3px); }
+  60% { transform: translateX(-1px); }
+}
+
+/* List container */
+.list {
+  display: flex;
   align-items: center;
   padding: 8px 20px;
   margin: 0;
   gap: var(--city-gap);
   list-style: none;
-  overflow-x: auto;         
-  -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
-.list::-webkit-scrollbar { display: none; }
 
-.item{ flex: 0 0 auto; }
+.list::-webkit-scrollbar { 
+  display: none; 
+}
 
+.item { 
+  flex: 0 0 auto; 
+}
+
+/* Button base styles - always showing content */
 .btn {
   position: relative;
-  width: var(--pill-width);
-  height: var(--city-thumb);    
-  padding: 0;           
+  width: var(--city-item-width);
+  height: var(--city-item-height);
+  padding: 0;
   border-radius: 999px;
   border: 1px solid hsl(var(--border));
   background: hsl(var(--surface));
   cursor: pointer;
-  -webkit-appearance: none; appearance: none;
-  overflow: hidden;          
-  transition:
-    background-color .2s ease,
-    border-color .2s ease,
-    box-shadow .2s ease,
-    transform .04s ease;
-  display: block;
-}
-.btn:hover { background: hsl(var(--primary)/.08); border-color: hsl(var(--primary)/.35); transform: translateY(-1px); }
-.btn:active { transform: translateY(0); }
-.btn:focus-visible { outline: none; box-shadow: 0 0 0 3px hsl(var(--accent)/.35); }
-
-.avatarWrap {
-  position: absolute;
-  top: 50%;
-  left: var(--pill-pad);
-  width: var(--city-thumb);
-  height: var(--city-thumb);
-  transform: translateY(-50%) translateX(0);  /* start on left */
-  border-radius: 50%;
   overflow: hidden;
-  border: 1px solid hsl(var(--border));
-  background: hsl(var(--surface));
-  box-shadow: var(--shadow-sm);
-  transition:
-    transform .28s cubic-bezier(.2,.8,.2,1),
-    border-color .2s ease,
-    box-shadow .2s ease;
-  z-index: 2;
-}
-.avatarWrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-.label{
-  position: absolute;
-  top: 50%;
-  right: var(--pill-pad); 
-  left: auto;
-  transform: translateY(-50%) translateX(8px);
-  opacity: 1;               /* ✅ show by default */
-  max-width: calc(var(--pill-width) - (var(--city-thumb) + var(--pill-pad) * 2));
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  font-size: 1rem;
-  font-weight: 600;
-  color: hsl(var(--text));
-  text-align: right;
-  transition:
-    opacity .18s ease,
-    transform .28s cubic-bezier(.2,.8,.2,1),
-    left .28s cubic-bezier(.2,.8,.2,1),
-    right .28s cubic-bezier(.2,.8,.2,1);
-  z-index: 1;
+  transition: all 0.28s cubic-bezier(.2,.8,.2,1);
+  -webkit-appearance: none;
+  appearance: none;
 }
 
-/* ACTIVE STATE:
-   - icon slides to the RIGHT
-   - label slides to the LEFT and becomes visible
-*/
-.active {
+/* Hover state */
+.btn:hover {
+  background: hsl(var(--primary)/.08);
+  border-color: hsl(var(--primary)/.35);
+  transform: translateY(-1px);
+}
+
+/* Active (selected) state */
+.btn.active {
   background: hsl(var(--primary)/.12);
   border-color: hsl(var(--primary)/.45);
   box-shadow: 0 6px 16px hsl(var(--primary)/.18);
 }
 
-.active .avatarWrap {
-  /* move icon to RIGHT edge inside fixed-width pill */
-  transform:
-    translateY(-50%)
-    translateX(calc(var(--pill-width) - var(--city-thumb) - (var(--pill-pad) * 2)));
+/* Click animation state */
+.btn.clicked {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Focus state */
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px hsl(var(--accent)/.35);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Button content layout - horizontal layout always visible */
+.content {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: var(--city-padding);
+  position: relative;
+}
+
+/* Avatar wrapper - always on the left */
+.avatarWrap {
+  position: relative;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--surface));
+  box-shadow: var(--shadow-sm);
+  transition: all 0.28s cubic-bezier(.2,.8,.2,1);
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.avatarWrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.btn:hover .avatarWrap {
+  transform: scale(1.05);
+}
+
+.btn.active .avatarWrap {
   border-color: hsl(var(--primary)/.45);
   box-shadow: 0 4px 10px hsl(var(--primary)/.22);
 }
 
-.active .label {
-  opacity: 1;
-  left: var(--pill-pad);
-  right: auto;
-  transform: translateY(-50%) translateX(0);
-  text-align: left; /* text on the LEFT in active */
+.avatarOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(0,0,0,0.1) 100%);
+  pointer-events: none;
 }
 
-/* Reduced motion */
+/* City information - always visible on the right */
+.cityInfo {
+  flex: 1;
+  margin-left: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+  opacity: 1; /* Always visible */
+  z-index: 1;
+}
+
+.cityName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: hsl(var(--text));
+  text-align: left;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.country {
+  font-size: 12px;
+  color: hsl(var(--text)/.7);
+  text-align: left;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.btn.active .country {
+  color: #FFA500;
+}
+
+/* Active indicator */
+.activeIndicator {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #FFA500;
+  z-index: 3;
+}
+
+/* Ripple effect */
+.rippleContainer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 165, 0, 0.3) 0%, transparent 70%);
+  transform: scale(0);
+  opacity: 0;
+  pointer-events: none;
+  width: 100px;
+  height: 100px;
+  left: 50%;
+  top: 50%;
+  margin-left: -50px;
+  margin-top: -50px;
+}
+
+.btn.clicked .ripple {
+  animation: rippleEffect 0.6s ease-out;
+}
+
+@keyframes rippleEffect {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  .avatarWrap, .label { transition: none !important; transform: translateY(-50%) !important; }
-  .active .avatarWrap { transform: translateY(-50%); left: calc(var(--pill-width) - var(--city-thumb) - var(--pill-pad)); }
+  .avatarWrap, .cityInfo {
+    transition: none !important;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  :root {
+    --city-item-width: clamp(170px, 28vw, 190px);
+    --city-item-height: 80px;
+    --avatar-size: 40px;
+    --city-padding: 12px;
+  }
+  
+  .cityName {
+    font-size: 14px;
+  }
+  
+  .country {
+    font-size: 11px;
+  }
+  
+  .list {
+    padding: 12px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --city-item-width: 150px;
+    --city-item-height: 68px;
+    --avatar-size: 50px;
+    --city-gap: 10px;
+  }
 }
