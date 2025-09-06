@@ -87,14 +87,16 @@ export default function SearchPage() {
     people
   };
 
-  const handleCityPick = async (cityName: string) => {
-  await handleSearch({
-    query,
-    city: cityName,
-    start,
-    end,
-    people,
-  });
+const handleCityPick = (cityName: string | null) => {
+  if (cityName) {
+    handleSearch({
+      query,
+      city: cityName,
+      start,
+      end,
+      people,
+    });
+  }
 };
 
 

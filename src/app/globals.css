@@ -63,7 +63,7 @@ a { color: inherit; text-decoration: none; }
   border-radius: 12px;
 }
 
-.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 1rem; position: relative; }
 
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;

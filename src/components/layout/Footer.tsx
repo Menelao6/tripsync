@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FaCompass, FaWhatsapp, FaInstagram, FaGithub } from 'react-icons/fa';
+import { FaCompass, FaWhatsapp, FaInstagram, FaGithub, FaLinkedin } from 'react-icons/fa';
 import styles from './Footer.module.css';
 
 const Footer = () => {
@@ -25,6 +25,9 @@ const Footer = () => {
               </Link>
               <Link href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                 <FaInstagram aria-hidden="true" />
+              </Link>
+              <Link href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="Linkedin">
+                <FaLinkedin aria-hidden="true" />
               </Link>
               <Link href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                 <FaGithub aria-hidden="true" />
