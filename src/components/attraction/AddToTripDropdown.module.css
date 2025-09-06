@@ -1,0 +1,145 @@
+.addWrap {
+  position: relative;
+  display: inline-block;
+}
+
+.addButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: hsl(var(--primary));
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.addButton:hover {
+  background: hsl(var(--primary) / 0.9);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.addButton:active {
+  transform: translateY(0);
+}
+
+.buttonContent {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  width: 280px;
+  background: hsl(var(--surface));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  z-index: 1000;
+  overflow: hidden;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdownHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: hsl(var(--primary) / 0.1);
+  border-bottom: 1px solid hsl(var(--border));
+  font-weight: 600;
+  color: hsl(var(--text));
+}
+
+.headerIcon {
+  color: hsl(var(--primary));
+}
+
+.scrollContainer {
+  position: relative;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.dateList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.noDates {
+  padding: 1.5rem;
+  text-align: center;
+  color: hsl(var(--text-2));
+}
+
+.dateButton {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid hsl(var(--border));
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: hsl(var(--text));
+}
+
+.dateButton:hover {
+  background: hsl(var(--primary) / 0.1);
+  color: hsl(var(--primary));
+}
+
+.dateButton:last-child {
+  border-bottom: none;
+}
+
+.scrollIndicator {
+  position: sticky;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 24px;
+  background: linear-gradient(
+    to bottom,
+    hsl(var(--surface)),
+    hsl(var(--surface) / 0.8)
+  );
+  color: hsl(var(--text-2));
+  z-index: 10;
+  pointer-events: none;
+}
+
+.scrollTop {
+  top: 0;
+  padding-bottom: 4px;
+}
+
+.scrollBottom {
+  bottom: 0;
+  padding-top: 4px;
+}
+
+@media (max-width: 640px) {
+  .dropdown {
+    width: min(320px, calc(100vw - 16px));
+    right: auto;
+    transform-origin: top center;
+  }
+}
