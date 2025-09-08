@@ -60,20 +60,6 @@ export default function Home() {
         <div className={styles.bgOrb}></div>
       </div>
 
-      {/* Interactive floating elements */}
-      <div className={styles.floatingIcon} style={{ top: '15%', left: '5%' }}>
-        <FaRegCompass />
-      </div>
-      <div className={styles.floatingIcon} style={{ top: '25%', right: '7%' }}>
-        <FaHeart />
-      </div>
-      <div className={styles.floatingIcon} style={{ bottom: '20%', left: '8%' }}>
-        <FaRegLightbulb />
-      </div>
-      <div className={styles.floatingIcon} style={{ bottom: '30%', right: '10%' }}>
-        <FaRegSmile />
-      </div>
-
       {/* Hero Section */}
       <section className={styles.hero} aria-labelledby="hero-title">
         <div className={styles.heroContent}>
@@ -104,21 +90,6 @@ export default function Home() {
                   <FaArrowRight aria-hidden="true" />
                 </button>
               </Link>
-            </div>
-
-            <div className={styles.heroStats}>
-              <div className={styles.stat}>
-                <span className={styles.statNumber}>50k+</span>
-                <span className={styles.statLabel}>Trips Planned</span>
-              </div>
-              <div className={styles.stat}>
-                <span className={styles.statNumber}>120+</span>
-                <span className={styles.statLabel}>Countries</span>
-              </div>
-              <div className={styles.stat}>
-                <span className={styles.statNumber}>98%</span>
-                <span className={styles.statLabel}>Satisfaction</span>
-              </div>
             </div>
           </div>
         </div>

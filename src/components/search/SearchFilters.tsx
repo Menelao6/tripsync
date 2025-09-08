@@ -4,14 +4,15 @@ import { useState } from 'react';
 import styles from './SearchFilters.module.css';
 import Input from '../ui/Input';
 import Button from '../ui/Button';
-import { FaSearch, FaPlus, FaMinus } from 'react-icons/fa';
+import { FaSearch, FaUsers, FaCalendarAlt } from 'react-icons/fa';
+import CreateSpacePrompt, { CreateSpacePayload } from '../search/CreateSpacePrompt';
 
-type SearchFormData = { 
-  query: string; 
-  city: string; 
-  start: string; 
-  end: string; 
-  people: number; 
+type SearchFormData = {
+  query: string;
+  city: string;
+  start: string;
+  end: string;
+  people: number;
 };
 
 type Props = {
@@ -20,98 +21,129 @@ type Props = {
 };
 
 export default function SearchFilters({ defaultValues, onSubmit }: Props) {
-  const [query, setQuery] = useState(defaultValues?.query ?? '');
-  const [city, setCity] = useState(defaultValues?.city ?? '');
+  const [q, setQ] = useState(defaultValues?.query ?? '');
   const [start, setStart] = useState(defaultValues?.start ?? '');
   const [end, setEnd] = useState(defaultValues?.end ?? '');
-  const [people, setPeople] = useState(defaultValues?.people ?? 2);
-
-  const handlePeopleChange = (value: number) => {
-    if (value < 1) return;
-    setPeople(value);
-  };
+  const [openCreate, setOpenCreate] = useState(false);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (people < 1) {
-      alert("Number of people must be at least 1");
-      setPeople(1);
-      return;
+    onSubmit({ query: q, city: '', start, end, people: defaultValues?.people ?? 2 });
+  };
+
+  const openCreateSpace = () => setOpenCreate(true);
+  const confirmCreateSpace = (payload: CreateSpacePayload) => {
+    setOpenCreate(false);
+    console.log('Create Space payload', payload);
+  };
+
+  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStart(e.target.value);
+    // If end date is before start date, clear end date
+    if (end && e.target.value > end) {
+      setEnd('');
     }
-    onSubmit({ query, city, start, end, people });
   };
 
   return (
-    <form className={styles.filters} onSubmit={submit} role="search" aria-label="Search attractions">
-      <div className={styles.row}>
-        <div className={styles.field}>
-          <Input 
-            placeholder="Eiffel Tower, beaches, museums..." 
-            value={query} 
-            onChange={e => setQuery(e.target.value)}
-            label="What to explore"
-          />
-        </div>
-        <div className={styles.field}>
-          <Input 
-            placeholder="Paris, Barcelona, Tokyo..." 
-            value={city} 
-            onChange={e => setCity(e.target.value)}
-            label="Destination city"
-          />
-        </div>
-        <div className={styles.field}>
-          <Input 
-            type="date" 
-            value={start} 
-            onChange={e => setStart(e.target.value)}
-            label="Start date"
-          />
-        </div>
-        <div className={styles.field}>
-          <Input 
-            type="date" 
-            value={end} 
-            onChange={e => setEnd(e.target.value)}
-            label="End date"
-          />
-        </div>
-        <div className={styles.peopleField}>
-          <label className={styles.label}>Travelers</label>
-          <div className={styles.peopleInput}>
-            <button 
-              type="button" 
-              className={styles.peopleButton}
-              onClick={() => handlePeopleChange(people - 1)}
-              aria-label="Decrease number of people"
-            >
-              <FaMinus />
-            </button>
-            <input
-              type="number"
-              min="1"
-              value={people}
-              onChange={e => handlePeopleChange(parseInt(e.target.value) || 1)}
-              className={styles.peopleCount}
-              aria-label="Number of people"
+    <>
+      <form className={styles.filters} onSubmit={submit} role="search" aria-label="Search attractions">
+        {/* top row: single smart bar + Explore + Plan Together */}
+        <div className={styles.topRow}>
+          <div className={styles.searchBar}>
+            <Input
+              label="Search places or cities"
+              placeholder="Try 'Paris' or 'museums in Rome'…"
+              value={q}
+              onChange={e => setQ(e.target.value)}
             />
-            <button 
-              type="button" 
-              className={styles.peopleButton}
-              onClick={() => handlePeopleChange(people + 1)}
-              aria-label="Increase number of people"
-            >
-              <FaPlus />
-            </button>
+          </div>
+
+          <div className={styles.primaryActions}>
+            <Button variant="primary" size="large" type="submit" className={styles.searchBtn}>
+              <FaSearch /> Explore
+            </Button>
+            <Button variant="secondary" size="large" type="button" onClick={openCreateSpace} className={styles.planBtn}>
+              <FaUsers /> Plan together
+            </Button>
           </div>
         </div>
-        <div className={styles.actions}>
-          <Button variant="primary" size="large" type="submit" className={styles.searchButton}>
-            <FaSearch />
-            Explore Now
-          </Button>
+
+        {/* chip row: light filters (dates for now) */}
+        <div className={styles.chipsRow} aria-label="Filters">
+          <div className={styles.dateInputsContainer}>
+            <div className={styles.dateInputGroup}>
+              <label htmlFor="start-date" className={styles.dateLabel}>
+                <FaCalendarAlt className={styles.labelIcon} />
+                Check-in
+              </label>
+              <div className={styles.dateInputWrapper}>
+                <input
+                  id="start-date"
+                  type="date"
+                  value={start}
+                  onChange={handleStartDateChange}
+                  aria-label="Start date"
+                  className={styles.dateInput}
+                  placeholder=" "
+                />
+                {!start && <span className={styles.inputPlaceholder}>Select date</span>}
+              </div>
+            </div>
+
+            <span className={styles.dateArrow}>→</span>
+
+            <div className={styles.dateInputGroup}>
+              <label htmlFor="end-date" className={styles.dateLabel}>
+                <FaCalendarAlt className={styles.labelIcon} />
+                Check-out
+              </label>
+              <div className={styles.dateInputWrapper}>
+                <input
+                  id="end-date"
+                  type="date"
+                  value={end}
+                  onChange={e => setEnd(e.target.value)}
+                  aria-label="End date"
+                  className={styles.dateInput}
+                  placeholder=" "
+                  min={start || undefined}
+                />
+                {!end && <span className={styles.inputPlaceholder}>Select date</span>}
+              </div>
+            </div>
+          </div>
+
+          {/* Future chips you can enable later:
+          <button type="button" className={styles.chip}>Category</button>
+          <button type="button" className={styles.chip}>Price</button>
+          <button type="button" className={styles.chip}>Rating</button>
+          */}
         </div>
-      </div>
-    </form>
+      </form>
+
+      {/* Plan Together popup */}
+      <CreateSpacePrompt
+        open={openCreate}
+        onClose={() => setOpenCreate(false)}
+        onConfirm={confirmCreateSpace}
+        defaults={{
+          name: buildDefaultName(q, start, end),
+          city: q,
+          start,
+          end,
+          visibility: 'friends',
+          people: 2,
+        }}
+      />
+    </>
   );
+}
+
+function buildDefaultName(q: string, start?: string, end?: string) {
+  const trimmed = q.trim();
+  const range = start && end ? `${start} → ${end}` : '';
+  if (trimmed && range) return `${trimmed} — ${range}`;
+  if (trimmed) return `${trimmed} trip`;
+  return 'My Trip';
 }

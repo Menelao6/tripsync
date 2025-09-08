@@ -1,148 +1,219 @@
+/* container */
 .filters {
-  background: hsl(var(--surface));
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  box-shadow: var(--shadow-md);
-  margin-top: 2rem;
-  border: 2px solid hsl(var(--primary) / 0.1);
-}
-
-.row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  align-items: end;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.peopleField {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: hsl(var(--text-2));
-}
-
-.peopleInput {
-  display: flex;
-  align-items: center;
-  background: hsl(var(--bg));
+  gap: 16px;
+  padding: 20px;
+  background: hsl(var(--surface));
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
-  overflow: hidden;
-  height: 48px;
+  box-shadow: var(--shadow-sm);
 }
 
-.peopleButton {
+/* top row */
+.topRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 16px;
+}
+
+.searchBar { 
+  min-width: 0; 
+}
+
+.primaryActions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.searchBtn, .planBtn { 
+  white-space: nowrap;
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 100%;
+  gap: 8px;
+}
+
+/* chips row */
+.chipsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Date inputs container */
+.dateInputsContainer {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 8px 16px;
+
+}
+
+.dateInputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dateLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: hsl(var(--text-2));
+  white-space: nowrap;
+}
+
+.labelIcon {
+  font-size: 18px;
+  color: hsl(var(--primary));
+}
+
+.dateInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dateInput {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 6px;
   background: hsl(var(--surface));
-  border: none;
   color: hsl(var(--text));
-  font-size: 1rem;
+  font-size: 14px;
+  min-width: 140px;
+  position: relative;
+  z-index: 2;
+}
+
+.dateInput:focus {
+  outline: none;
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.1);
+}
+
+.inputPlaceholder {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: hsl(var(--text) / 0.5);
+  font-size: 14px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.dateInput:focus + .inputPlaceholder,
+.dateInput:not([value=""]) + .inputPlaceholder {
+  display: none;
+}
+
+.dateArrow {
+  color: hsl(var(--text-2));
+  font-weight: 500;
+  padding: 0 4px;
+  margin-bottom: 8px;
+}
+
+/* generic chip (for future use) */
+.chip {
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px dashed hsl(var(--border));
+  background: hsl(var(--bg));
+  font-weight: 500;
+  font-size: 14px;
+  color: hsl(var(--text));
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.peopleButton:hover {
-  background: hsl(var(--primary) / 0.1);
-}
-
-.peopleButton:active {
-  background: hsl(var(--primary) / 0.2);
-}
-
-.peopleCount {
-  width: 60px;
-  height: 100%;
-  border: none;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: 600;
-  color: hsl(var(--text));
-  background: transparent;
-  -moz-appearance: textfield;
-}
-
-.peopleCount::-webkit-outer-spin-button,
-.peopleCount::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.actions {
-  display: flex;
-  align-items: end;
-  height: 100%;
-}
-
-.searchButton {
-  width: 100%;
-  justify-content: center;
-}
-
-/* Experimental floating label effect */
-.field input:focus + label,
-.field input:not(:placeholder-shown) + label {
-  transform: translateY(-0.5rem) scale(0.85);
-  color: hsl(var(--primary));
+.chip:hover {
+  border-color: hsl(var(--primary) / 0.5);
+  background: hsl(var(--primary) / 0.05);
 }
 
 /* Responsive design */
-@media (max-width: 968px) {
-  .row {
-    grid-template-columns: repeat(2, 1fr);
+@media (max-width: 880px) {
+  .topRow {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .primaryActions {
+    justify-content: flex-start;
   }
 }
 
 @media (max-width: 640px) {
   .filters {
-    padding: 1.25rem;
+    padding: 16px;
+    gap: 14px;
   }
   
-  .row {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
+  .primaryActions {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
   }
   
-  .peopleInput {
-    height: 44px;
+  .searchBtn,
+  .planBtn {
+    width: 100%;
+    justify-content: center;
   }
   
-  .peopleButton {
-    width: 44px;
+  .dateInputsContainer {
+    padding: 8px 12px;
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .dateInput {
+    min-width: 120px;
+    width: 100%;
+  }
+  
+  .dateInputGroup {
+    flex: 1;
   }
 }
 
-/* Animation for the search button */
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+@media (max-width: 480px) {
+  .dateInputsContainer {
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 12px;
+    gap: 8px;
   }
-  70% {
-    box-shadow: 0 0 0 10px hsl(var(--primary) / 0);
+  
+  .dateArrow {
+    align-self: center;
+    margin: 0;
+    transform: rotate(90deg);
   }
-  100% {
-    box-shadow: 0 0 0 0 hsl(var(--primary) / 0);
+  
+  .dateInput {
+    min-width: auto;
   }
 }
 
-.searchButton {
-  animation: pulse 2s infinite;
+/* Better alignment and spacing improvements */
+.topRow .searchBar input {
+  height: 48px;
 }
 
-.searchButton:hover {
-  animation: none;
+.primaryActions button {
+  height: 48px;
+  padding: 0 20px;
+}
+
+.chipsRow {
+  padding-top: 4px;
 }
